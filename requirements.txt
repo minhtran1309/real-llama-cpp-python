@@ -1,0 +1,5 @@
+scikit-learn
+langchain
+langchain-community
+transformers
+torchvision
