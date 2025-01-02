@@ -7,4 +7,4 @@ Installing llama-cpp-python is a pain in the bum. However, langchain only suppor
 ## Installation
 
 ```bash
-pip install custom-llm
+pip install real-llama-cpp-python
