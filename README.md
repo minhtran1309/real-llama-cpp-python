@@ -5,9 +5,9 @@ A simple custom wrapper for llama.cpp models in Python, support seamlessly inter
 
 While it might seem intuitive that llama-cpp-python would seamlessly integrate with llama.cpp, the reality is that installing llama-cpp-python is a pain in the bum. It is NOT simple as described `pip install llama-cpp-python`.  
 
-Langchain, by default, supports [llama-cpp-python](https://python.langchain.com/docs/integrations/llms/llamacpp/). real-llama-cpp-python is a simplified and an alternative library designed to seamlessly integrate with LangChain while avoiding the pain of installing the library llama-cpp-python. 
+Langchain, by default, supports [llama-cpp-python](https://python.langchain.com/docs/integrations/llms/llamacpp/). If you have a pipeline that works with Langchain, it would be very difficult to run the latest quantized model (gguf files downloaded from HuggingFace) from llama.cpp. The real-llama-cpp-python is a simplified and an alternative library designed to seamlessly integrate with LangChain while avoiding the pain of installing the library llama-cpp-python. 
 
-llama.cpp can be installed or built easily. The llama.cpp community is also very active that any issue with the installation can be resolved in a few days (unlike llama-cpp-python).  
+llama.cpp can be installed or built easily. (If you are facing the challenge by the time you install llama.cpp, the llama.cpp community is also very active that any issue can be resolved in a few days (unlike llama-cpp-python).  
 
 ## Installation
 As the name said, it is truly a wrapper for llama.cpp, you should first install llama.cpp into your machine. 
