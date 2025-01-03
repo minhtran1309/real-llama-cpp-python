@@ -1,5 +1,5 @@
 import unittest
-from llama_cpp import CustomLlamaCpp
+from ..llama_cpp import CustomLlamaCpp
 from langchain_core.callbacks import CallbackManager, StreamingStdOutCallbackHandler
 from langchain_core.output_parsers import StrOutputParser
 
