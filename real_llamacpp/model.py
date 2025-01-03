@@ -208,23 +208,22 @@ class CustomLlamaCpp(LLM):
         # Combine default parameters with any overrides provided via kwargs
         params = {**self._default_params, **kwargs}
         params["prompt"] = prompt  # Add the input prompt explicitly
-        # Construct the command using the combined parameters
+        # execute llama-cli
         command = ["llama-cli", "-m", self.model_path]
-        # Map parameters to CLI arguments
+        # Add parameters 
         for key, value in params.items():
             if value is None:
-                continue  # Skip unset parameters
-            if isinstance(value, bool):  # Handle flags
+                continue  
+            if isinstance(value, bool):  
                 if value:
                     command.extend([f"--{key.replace('_', '-')}", str(value)])
-            elif isinstance(value, list):  # Handle list parameters
+            elif isinstance(value, list):  
                 for item in value:
                     command.extend([f"--{key.replace('_', '-')}", str(item)])
             else:  # Handle standard key-value parameters
                 command.extend([f"--{key.replace('_', '-')}", str(value)])
         # print(command)
         try:
-            # Execute the command and capture the output
             result = subprocess.run(
                 command,
                 stdout=subprocess.PIPE,
@@ -236,6 +235,12 @@ class CustomLlamaCpp(LLM):
             raise RuntimeError(
                 f"Error running llama-cli: {e.stderr.strip()}"
             ) 
+        except FileNotFoundError as e:
+            raise RuntimeError(
+                f"Command '{command[0]}' not found. Make sure it is installed llama.cpp and added llama.cpp to PATH."
+            ) from e
+        except Exception as e:
+            raise RuntimeError(f"An unexpected error occurred: {str(e)}") from e
 
     def _stream(
         self,
