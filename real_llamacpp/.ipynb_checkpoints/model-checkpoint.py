@@ -13,6 +13,7 @@ from pathlib import Path
 from langchain_core.language_models.llms import LLM
 from langchain_core.outputs import GenerationChunk
 from pydantic import Field, model_validator
+from langchain_core.callbacks.manager import CallbackManagerForLLMRun
 
 class CustomLlamaCpp(LLM):
     """llama.cpp model.
@@ -135,7 +136,7 @@ class CustomLlamaCpp(LLM):
 
         .. code-block:: python
 
-            model = CustomChatModel(n=2)
+            model = CustomLlamaCpp(model='Mistral-Nemo-Instruct-2407.Q5_K_S.gguf')
             result = model.invoke([HumanMessage(content="hello")])
             result = model.batch([[HumanMessage(content="hello")],
                                  [HumanMessage(content="world")]])
