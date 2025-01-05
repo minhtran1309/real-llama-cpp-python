@@ -202,7 +202,7 @@ class CustomLlamaCpp(LLM):
             The model output as a string. Actual completions SHOULD NOT include the prompt.
         """
         import subprocess
-        print('I am jumping around here')
+        # print('I am jumping around here')
         if stop is not None:
             raise ValueError("stop kwargs are not permitted.")
         # Combine default parameters with any overrides provided via kwargs
