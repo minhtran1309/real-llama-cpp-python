@@ -68,6 +68,8 @@ with open('/home/minhtran/Projects/clinical_trial_llm_translation/input/TNM_stag
     for line in file:
         # print(line)
         tnm_staging+= line
+actrn_trial_pd=pd.read_csv(f'/home/minhtran/Projects/clinical_trial_llm_translation/input/ANZCTR_trials.csv', index_col=0)
+concensus_trials = actrn_trial_pd[(actrn_trial_pd['NCT']!='') & (actrn_trial_pd['ACTRN']!=''  )]
 class TrialInfor:
     """ClinicalTrials.gov API client
 
@@ -508,7 +510,11 @@ if __name__ == '__main__':
     
     trial_id = filtered_trial_df2.iloc[key]['NCT Number']
     print(trial_id)
+    
     new_row = {'ClinicalTrials.gov': {'id':filtered_trial_df2.iloc[key]['NCT Number'], 'href':f'https://clinicaltrials.gov/study/{trial_id}'}}
+    if len(concensus_trials[concensus_trials['NCT']==trial_id]) ==1: 
+        anzctrn_id = concensus_trials[concensus_trials['NCT']==trial_id]['ACTRN'].values[0]
+        new_row['ANZCTR.org.au'] = {'id':anzctrn_id, 'href':f'https://www.anzctr.org.au/TrialSearch.aspx?searchTxt={anzctrn_id}'}
     new_row['Other IDs'] = filtered_trial_df2.iloc[key]['Other IDs']
     trial_detail = extract_key_clinical_trial_infor(trial_id)
     tmp_short_name = str(filtered_trial_df2.iloc[key]['Acronym'])
