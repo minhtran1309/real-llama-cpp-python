@@ -69,7 +69,8 @@ with open('/home/minhtran/Projects/clinical_trial_llm_translation/input/TNM_stag
         # print(line)
         tnm_staging+= line
 actrn_trial_pd=pd.read_csv(f'/home/minhtran/Projects/clinical_trial_llm_translation/input/ANZCTR_trials.csv', index_col=0)
-concensus_trials = actrn_trial_pd[(actrn_trial_pd['NCT']!='') & (actrn_trial_pd['ACTRN']!=''  )]
+concensus_trials = actrn_trial_pd[(actrn_trial_pd['NCT']!='') & (actrn_trial_pd['ACTRN']!=''  ) & ~actrn_trial_pd['NCT'].isna() & ~actrn_trial_pd['ACTRN'].isna()] 
+print(concensus_trials)
 class TrialInfor:
     """ClinicalTrials.gov API client
 
@@ -481,7 +482,7 @@ if __name__ == '__main__':
         ### [INST] 
         Instruction: Answer the question based on your knowledge about breast cancer TNM staging. 
         Think rationally before providing the final answer following these steps. 
-        Step 1: Check if the question is within the knwnledge. 
+        Step 1: Check if the question is within the knowledge. 
         Here is a known context to help with the response:\n 
         {context} 
         Step 2: Construct the response to the question by searching the context. \n
@@ -512,9 +513,11 @@ if __name__ == '__main__':
     print(trial_id)
     
     new_row = {'ClinicalTrials.gov': {'id':filtered_trial_df2.iloc[key]['NCT Number'], 'href':f'https://clinicaltrials.gov/study/{trial_id}'}}
-    if len(concensus_trials[concensus_trials['NCT']==trial_id]) ==1: 
+    if (len(concensus_trials[concensus_trials['NCT']==trial_id]) ==1) : 
         anzctrn_id = concensus_trials[concensus_trials['NCT']==trial_id]['ACTRN'].values[0]
         new_row['ANZCTR.org.au'] = {'id':anzctrn_id, 'href':f'https://www.anzctr.org.au/TrialSearch.aspx?searchTxt={anzctrn_id}'}
+        # print(concensus_trials[concensus_trials['NCT']==trial_id])
+        # 1/0
     new_row['Other IDs'] = filtered_trial_df2.iloc[key]['Other IDs']
     trial_detail = extract_key_clinical_trial_infor(trial_id)
     tmp_short_name = str(filtered_trial_df2.iloc[key]['Acronym'])
@@ -649,7 +652,7 @@ if __name__ == '__main__':
     chat_history_for_onco_chain.clear()
     infor2explain = f'Brief description: {tmp_brief_sum} \n Arms: {tmp_arm_string} \n Some more detail: {tmp_detail_summary} \n'
     chunked_infor2explain = eli_text_splitter.split_text(infor2explain)
-    multihead_chain4 = oncologist_chain_with_mem.invoke({'input':f'This is some information about the clinical trial: \n {chunked_infor2explain}. Explain to me the trial procedure in lay-person language, formal and easy-to-understand words. Provide as much detail as possible'},
+    multihead_chain4 = oncologist_chain_with_mem.invoke({'input':f'This is some information about the clinical trial: \n {chunked_infor2explain}. Explain to me the trial procedure in lay-person language, formal and easy-to-understand words. Provide as much detail as possible without using abbreviation and acronym'},
                                                       {'configurable': {'session_id': f'oncologist_{trial_id}'}})
     new_row['Translated Detailed Description'] = re.sub('(AI|Expert|Oncologist): ','',extract_prompt_response(multihead_chain4 ))
     new_row['Version'] = datetime.now().strftime('%Y-%m-%d-%H:%M')
