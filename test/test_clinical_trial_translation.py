@@ -130,7 +130,7 @@ def location_parser(input_location, filter_by='Australia'):
     # Regular expression to match the postcodes
     postcode_pattern = r'\b\d{4}\b|\b\d{5}\b|\b\d{6}\b|\b\d{5}-\d{3}\b|\b\d{2}-\d{3}\b'
     # Split the string by the postcodes and keep the postcodes in the resulting list
-    split_string = re.split(f'({postcode_pattern})', locations)
+    split_string = re.split(f'({postcode_pattern})', input_location)
     
     # Combine the split parts with the postcodes
     loc_res = [re.sub(r'^, |^\-\d{3}, ', '', split_string[i] + split_string[i+1]) for i in range(0, len(split_string) - 1, 2)]
