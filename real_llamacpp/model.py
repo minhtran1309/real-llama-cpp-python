@@ -14,7 +14,7 @@ from langchain_core.language_models.llms import LLM
 from langchain_core.outputs import GenerationChunk
 from pydantic import Field, model_validator
 from langchain_core.callbacks.manager import CallbackManagerForLLMRun
-from _utils import strip_echo
+from real_llamacpp._utils import strip_echo
 
 class CustomLlamaCpp(LLM):
     """llama.cpp model.

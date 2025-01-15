@@ -1,2 +1,2 @@
 from .model import CustomLlamaCpp
-from .utils import strip_echo 
+from ._utils import strip_echo 
