@@ -14,6 +14,7 @@ from langchain_core.language_models.llms import LLM
 from langchain_core.outputs import GenerationChunk
 from pydantic import Field, model_validator
 from langchain_core.callbacks.manager import CallbackManagerForLLMRun
+from _utils import strip_echo, extract_prompt_response
 
 class CustomLlamaCpp(LLM):
     """llama.cpp model.
@@ -154,7 +155,6 @@ class CustomLlamaCpp(LLM):
             "temp": self.temperature,
             "top_p": self.top_p,
             "logprobs": self.logprobs,
-            "echo": self.echo,
             "stop_sequences": self.stop,  # Consistent with LLM class convention
             "repeat_penalty": self.repeat_penalty,
             "top_k": self.top_k,
@@ -166,6 +166,7 @@ class CustomLlamaCpp(LLM):
             "use_mlock": self.use_mlock,
             "seed": self.seed,
             "verbosity": self.verbosity,
+            # "echo": self.echo,
         }
     
         # Add grammar-specific parameters
@@ -224,13 +225,15 @@ class CustomLlamaCpp(LLM):
                 command.extend([f"--{key.replace('_', '-')}", str(value)])
         # print(command)
         try:
-            result = subprocess.run(
+            llama_cli_output = subprocess.run(
                 command,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 check=True,
             )
-            return result.stdout.strip()  # Return the model's output
+            str_output = llama_cli_output.stdout.strip()
+            result = strip_echo(self.echo, prompt, str_output)
+            return  result # result.stdout.strip()  Return the model's output
         except subprocess.CalledProcessError as e:
             raise RuntimeError(
                 f"Error running llama-cli: {e.stderr.strip()}"
