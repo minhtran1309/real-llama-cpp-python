@@ -17,5 +17,3 @@ if __name__ == "__main__":
     prompt = '### Instruction: How many R in the word strawberry?\n\n ### Response: \n'
     output = llm.invoke(prompt)
     print(output)
-    
-    
