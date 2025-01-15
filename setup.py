@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="real-llama-cpp-python",
-    version="0.1.2",
+    version="0.1.3",
     description="A simple custom LLM wrapper for llama.cpp with LangChain compatibility.",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
